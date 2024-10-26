@@ -5,41 +5,45 @@ import { FfmpegService } from './services/ffmpeg.service';
   selector: 'app-root',
   template: `
     <app-video-input (fileSelected)="onFileSelected($event)"></app-video-input>
-    <app-video-timeline *ngIf="videoDuration" [duration]="videoDuration" (timeChange)="onTimeChange($event)"></app-video-timeline>
+    <app-video-timeline
+      *ngIf="selectedFile"
+      [videoFile]="selectedFile"
+      (startAndEndTime)="onTimeUpdate($event)"
+    ></app-video-timeline>
+    
     <button (click)="trimVideo()" [disabled]="!canTrim">Trim Video</button>
+    
+    <!-- <video controls *ngIf="videoUrl" [src]="videoUrl" width="600"></video> -->
+    <!-- <video controls *ngIf="trimmedVideoUrl" [src]="trimmedVideoUrl" width="600"></video> -->
     <app-video-output *ngIf="trimmedVideoUrl" [videoUrl]="trimmedVideoUrl"></app-video-output>
   `
 })
 export class AppComponent {
   selectedFile!: File;
-  videoDuration: number = 0;
+  videoUrl: string | undefined;
+  trimmedVideoUrl: any | undefined;
   startTime: number = 0;
   endTime: number = 0;
-  trimmedVideoUrl: string | undefined;
+  canTrim = false;
 
   constructor(private ffmpegService: FfmpegService) {}
 
   onFileSelected(file: File) {
     this.selectedFile = file;
-    const video = document.createElement('video');
-    video.src = URL.createObjectURL(file);
-    video.onloadedmetadata = () => {
-      this.videoDuration = video.duration;
-      this.endTime = video.duration;
-    };
+    this.videoUrl = URL.createObjectURL(file);
+    this.canTrim = true; // Enable trim button after file is selected
   }
 
-  onTimeChange(times: { start: number, end: number }) {
-    this.startTime = times.start;
-    this.endTime = times.end;
+  onTimeUpdate({ startTime, endTime }: { startTime: number; endTime: number }) {
+    this.startTime = startTime;
+    this.endTime = endTime;
   }
 
   async trimVideo() {
-    const trimmedBlob = await this.ffmpegService.trimVideo(this.selectedFile, this.startTime, this.endTime);
-    this.trimmedVideoUrl = URL.createObjectURL(trimmedBlob);
-  }
-
-  get canTrim() {
-    return this.startTime >= 0 && this.endTime > this.startTime;
+    if (this.selectedFile && this.endTime > this.startTime) {
+      this.canTrim = false; // Disable trim button during processing
+      this.trimmedVideoUrl = await this.ffmpegService.trimVideo(this.selectedFile, this.startTime, this.endTime);
+      this.canTrim = true; // Re-enable trim button after processing
+    }
   }
 }

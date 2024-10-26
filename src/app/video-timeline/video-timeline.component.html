@@ -1,1 +1,31 @@
-<p>video-timeline works!</p>
+<div class="controls">
+    <label for="startTime">Start Time: {{ startTime | number: '1.0-2' }} seconds</label>
+    <label for="endTime">End Time: {{ endTime | number: '1.0-2' }} seconds</label>
+  </div>
+  
+  <div class="timeline-container" (scroll)="onScroll($event)">
+    <div class="frames-container">
+      <div *ngFor="let frame of frames" class="frame">
+        <img [src]="frame" alt="Frame" />
+      </div>
+    </div>
+  
+    <!-- Needle for Start Time -->
+    <div
+      class="needle start-needle"
+      [style.left.px]="getNeedlePosition('start')"
+      (mousedown)="startDrag('start')"
+    ></div>
+  
+    <!-- Needle for End Time -->
+    <div
+      class="needle end-needle"
+      [style.left.px]="getNeedlePosition('end')"
+      (mousedown)="startDrag('end')"
+    ></div>
+  </div>
+  
+  <!-- <div class="trim-button-container">
+    <button (click)="trimVideo()">Trim Video</button>
+  </div>
+   -->
