@@ -1,0 +1,4 @@
+<input type="file" (change)="onFileSelected($event)" accept="video/*">
+<div *ngIf="safeVideoUrl">
+    <video controls [src]="safeVideoUrl" width="400"></video>
+  </div>
