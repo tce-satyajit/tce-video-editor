@@ -41,7 +41,7 @@ export class VideoTimelineComponent implements OnInit {
   }
 
   onScroll(event: Event) {
-    // No update to startTime or endTime on scroll
+    // Placeholder for any future scroll handling
   }
 
   startDrag(type: 'start' | 'end') {
@@ -55,7 +55,6 @@ export class VideoTimelineComponent implements OnInit {
       if (timelineRect) {
         const mouseX = event.clientX - timelineRect.left;
         const visibleWidth = this.getVisibleWidth();
-        const durationPerPixel = this.videoDuration / visibleWidth;
 
         // Calculate the new time based on the mouse position and scroll
         const newTime = (mouseX / visibleWidth) * this.videoDuration;

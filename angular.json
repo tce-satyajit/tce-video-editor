@@ -76,11 +76,7 @@
             },
             "development": {
               "browserTarget": "video-editor:build:development"
-            },
-            "options": {
-            "browserTarget": "tce-teacher:build",
-            "proxyConfig": "server.js"
-          }
+            }
           },
           "defaultConfiguration": "development"
         },

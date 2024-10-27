@@ -9,6 +9,7 @@
     width: 100%;
     height: 100px;
     overflow: hidden;
+    background-color: black;
   }
   
   .needle-container {
@@ -39,18 +40,22 @@
   
   .frames-container {
     position: absolute;
-    top: 0;
+    top: 17px;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     overflow-x: auto;
     display: flex;
-    gap: 1px;
-    padding-top: 20px;
+    grid-gap: 1px;
+    gap: 0px;
+    /* padding-top: 20px; */
+    /* background: white; */
+    align-items: center;
+    border: 2px solid orange;
   }
   
-  .frames img {
-    width: 80px;
-    height: 100%;
+  .frame img {
+    width: 100px;
+    border-radius: 5px;
   }
   
   .trim-button-container {

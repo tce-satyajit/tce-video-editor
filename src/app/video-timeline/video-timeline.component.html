@@ -3,8 +3,8 @@
     <label for="endTime">End Time: {{ endTime | number: '1.0-2' }} seconds</label>
   </div>
   
-  <div class="timeline-container" (scroll)="onScroll($event)">
-    <div class="frames-container">
+  <div class="timeline-container">
+    <div class="frames-container" (scroll)="onScroll($event)">
       <div *ngFor="let frame of frames" class="frame">
         <img [src]="frame" alt="Frame" />
       </div>
@@ -23,9 +23,11 @@
       [style.left.px]="getNeedlePosition('end')"
       (mousedown)="startDrag('end')"
     ></div>
+  
+    <div class="needle-container"></div>
   </div>
   
-  <!-- <div class="trim-button-container">
+  <div class="trim-button-container">
     <button (click)="trimVideo()">Trim Video</button>
   </div>
-   -->
+  
