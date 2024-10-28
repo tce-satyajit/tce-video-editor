@@ -69,7 +69,7 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
       "container": this.waveformContainer.nativeElement,
       "height": 80,
       "splitChannels": false,
-      "normalize": false,
+      "normalize": true,
       "waveColor": "#828282",
       "progressColor": "#f50571",
       "cursorColor": "blue",
@@ -84,6 +84,8 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
       "hideScrollbar": true,
       "audioRate": 1,
       "autoCenter": true,
+      "responsive":true,
+      
     });
 
     this.waveSurfer.load(audioUrl);

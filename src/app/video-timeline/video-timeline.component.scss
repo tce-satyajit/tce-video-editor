@@ -16,8 +16,9 @@
     width: 100%;
     overflow-x: auto;
     display: flex;
-    gap: 1px;
+    //gap: 1px;
     align-items: center;
+    scroll-behavior:smooth;
   }
   
   .frame img {
@@ -32,6 +33,7 @@
     pointer-events: auto;
     top: 0;
     transform: translateX(-50%);
+    z-index: 2;
   }
   
   .start-needle {
