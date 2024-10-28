@@ -4,8 +4,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-video-output',
   template: `
-    <div *ngIf="safeVideoUrl">
-      <video controls [src]="safeVideoUrl" width="400"></video>
+    <div *ngIf="safeVideoUrl" style="text-align: center; background: black;">
+      <video controls [src]="safeVideoUrl" width="50%"></video>
     </div>
   `
 })

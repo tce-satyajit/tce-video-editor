@@ -27,6 +27,8 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
   private waveSurferUpdateInterval: any;
   private isSeeking: boolean = false; // Flag to prevent feedback loop
 
+  unsafeUrl: any;
+  safeVideoUrl: any;
   constructor(
     private ffmpegService: FfmpegService, 
     private sanitizer: DomSanitizer,
@@ -37,11 +39,13 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
       this.frames = await this.extractFrames(5);
 
       const video = this.videoPlayer.nativeElement;
-      video.src = URL.createObjectURL(this.videoFile);
+      this.unsafeUrl = URL.createObjectURL(this.videoFile);
+      this.safeVideoUrl = this.sanitizer.bypassSecurityTrustUrl(this.unsafeUrl);
+      //video.src = this.safeVideoUrl;//URL.createObjectURL(this.videoFile);
       video.onloadedmetadata = () => {
         this.videoDuration = video.duration;
         this.endTime = this.videoDuration;
-        URL.revokeObjectURL(video.src);
+        //URL.revokeObjectURL(video.src);
       };
 
       this.initializeWaveform();
@@ -66,7 +70,7 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
       "height": 80,
       "splitChannels": false,
       "normalize": false,
-      "waveColor": "#ffffff",
+      "waveColor": "#828282",
       "progressColor": "#f50571",
       "cursorColor": "blue",
       "cursorWidth": 5,

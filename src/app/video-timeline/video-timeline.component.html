@@ -1,10 +1,16 @@
-<div class="controls">
-    <label>Start Time: {{ startTime | number: '1.0-2' }} seconds</label>
-    <label>End Time: {{ endTime | number: '1.0-2' }} seconds</label>
-  </div>
+<div class="videoPlayer">
+    <video #videoPlayer controls [src]="safeVideoUrl" style="width: 40%;"></video>
+    <div class="controls">
+        <label>Start Time: {{ startTime | number: '1.0-2' }} seconds</label>
+        <label>End Time: {{ endTime | number: '1.0-2' }} seconds</label>
+      </div>
+</div>
+
+
+
   
   <div class="timeline-container">
-    <video #videoPlayer controls></video>
+    
   
     <div #framesContainer class="frames-container" (scroll)="onScroll($event)">
       <div *ngFor="let frame of frames" class="frame">
@@ -12,17 +18,14 @@
       </div>
     </div>
   
+    
+    <div class="needle start-needle" [style.left.px]="getNeedlePosition('start')" (mousedown)="startDrag('start')">
+        <div class="needleInner"></div>
+    </div>
+    <div class="needle end-needle" [style.left.px]="getNeedlePosition('end')" (mousedown)="startDrag('end')">
+        <div class="needleInner"></div>
+    </div>
     <div #waveformContainer class="waveform-container"></div>
-    <div
-      class="needle start-needle"
-      [style.left.px]="getNeedlePosition('start')"
-      (mousedown)="startDrag('start')"
-    ></div>
-    <div
-      class="needle end-needle"
-      [style.left.px]="getNeedlePosition('end')"
-      (mousedown)="startDrag('end')"
-    ></div>
   
     
   </div>
