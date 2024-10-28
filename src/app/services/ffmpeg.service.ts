@@ -19,17 +19,11 @@ export class FfmpegService {
     }
   }
 
-  
-
-
   async trimVideo(file: File, startTime: number, endTime: number): Promise<string> {
     await this.loadFFmpeg();
-
-    // Write the input video file
     const data = await file.arrayBuffer();
     this.ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(data));
 
-    // Run FFmpeg to trim the video
     const duration = endTime - startTime;
     await this.ffmpeg.run(
       '-i', 'input.mp4',
@@ -39,36 +33,27 @@ export class FfmpegService {
       'output.mp4'
     );
 
-    // Read the result
     const trimmedData = this.ffmpeg.FS('readFile', 'output.mp4');
     const blob = new Blob([trimmedData.buffer], { type: 'video/mp4' });
-    const url = URL.createObjectURL(blob); // This is a string URL
+    const url = URL.createObjectURL(blob);
 
-    // Clean up
     this.ffmpeg.FS('unlink', 'input.mp4');
     this.ffmpeg.FS('unlink', 'output.mp4');
 
-    return url; // Return as a string URL
+    return url;
   }
-
-
-  
 
   async extractFrames(file: File, intervalInSeconds: number = 1): Promise<string[]> {
     await this.loadFFmpeg();
-  
-    // Write the input file
     const data = await file.arrayBuffer();
     this.ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(data));
-  
-    // Set up FFmpeg command to extract frames every `intervalInSeconds` seconds at lower resolution
+
     await this.ffmpeg.run(
       '-i', 'input.mp4',
-      '-vf', `fps=1/${intervalInSeconds},scale=320:-1`, // Extract one frame every `intervalInSeconds` seconds
+      '-vf', `fps=1/${intervalInSeconds},scale=320:-1`,
       'frame_%04d.jpg'
     );
-  
-    // Read the frames from the FFmpeg filesystem
+
     const frames: string[] = [];
     const files = ((this.ffmpeg.FS as any)('readdir', '/').filter((f: string) => f.startsWith('frame_')));
     
@@ -76,17 +61,59 @@ export class FfmpegService {
       const data = this.ffmpeg.FS('readFile', file);
       const blob = new Blob([data.buffer], { type: 'image/jpeg' });
       frames.push(URL.createObjectURL(blob));
-      this.ffmpeg.FS('unlink', file); // Remove frame from FS to save memory
+      this.ffmpeg.FS('unlink', file);
     }
   
-    // Clean up
     this.ffmpeg.FS('unlink', 'input.mp4');
     
     return frames;
   }
-  
+
+  async extractAudio(file: File): Promise<string> {
+    await this.loadFFmpeg();
+    const data = await file.arrayBuffer();
+    this.ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(data));
+
+    await this.ffmpeg.run(
+      '-i', 'input.mp4',
+      '-q:a', '0',
+      '-map', 'a',
+      'audio.mp3'
+    );
+
+    const audioData = this.ffmpeg.FS('readFile', 'audio.mp3');
+    const audioBlob = new Blob([audioData.buffer], { type: 'audio/mp3' });
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    this.ffmpeg.FS('unlink', 'input.mp4');
+    this.ffmpeg.FS('unlink', 'audio.mp3');
+
+    return audioUrl;
+  }
+
+  async generateWaveform(file: File, barCount: number): Promise<number[]> {
+    await this.loadFFmpeg();
+    const audioUrl = await this.extractAudio(file);
+
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioData = await fetch(audioUrl).then(res => res.arrayBuffer());
+    const audioBuffer = await audioContext.decodeAudioData(audioData);
+
+    const samples = audioBuffer.getChannelData(0);
+    const barWidth = Math.floor(samples.length / barCount);
+    const waveform: number[] = [];
+
+    for (let i = 0; i < barCount; i++) {
+      const barStart = i * barWidth;
+      const barEnd = barStart + barWidth;
+      let sum = 0;
+      for (let j = barStart; j < barEnd; j++) {
+        sum += Math.abs(samples[j]);
+      }
+      const average = sum / barWidth;
+      waveform.push(average);
+    }
+
+    return waveform.map(value => value * 100); // Scale for rendering
+  }
 }
-
-
-
-

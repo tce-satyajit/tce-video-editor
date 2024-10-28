@@ -6,6 +6,7 @@ import { VideoInputComponent } from './video-input/video-input.component';
 import { VideoOutputComponent } from './video-output/video-output.component';
 import { VideoTimelineComponent } from './video-timeline/video-timeline.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +15,7 @@ import { VideoTimelineComponent } from './video-timeline/video-timeline.componen
     VideoTimelineComponent
   ],
   imports: [
-    BrowserModule, FormsModule
+    BrowserModule, FormsModule, 
   ],
   providers: [],
   bootstrap: [AppComponent]
