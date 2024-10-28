@@ -1,8 +1,8 @@
 <div class="videoPlayer">
     <video #videoPlayer controls [src]="safeVideoUrl" style="width: 40%;"></video>
     <div class="controls">
-        <label>Start Time: {{ startTime | number: '1.0-2' }} seconds</label>
-        <label>End Time: {{ endTime | number: '1.0-2' }} seconds</label>
+        <div>Start Time: {{ startTime | number: '1.0-2' }} seconds</div>
+        <div>End Time: {{ endTime | number: '1.0-2' }} seconds</div>
       </div>
 </div>
 
