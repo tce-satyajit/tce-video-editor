@@ -12,9 +12,6 @@ import { FfmpegService } from './services/ffmpeg.service';
     ></app-video-timeline>
     
     <button (click)="trimVideo()" [disabled]="!canTrim">Trim Video</button>
-    
-    <!-- <video controls *ngIf="videoUrl" [src]="videoUrl" width="600"></video> -->
-    <!-- <video controls *ngIf="trimmedVideoUrl" [src]="trimmedVideoUrl" width="600"></video> -->
     <app-video-output *ngIf="trimmedVideoUrl" [videoUrl]="trimmedVideoUrl"></app-video-output>
   `
 })

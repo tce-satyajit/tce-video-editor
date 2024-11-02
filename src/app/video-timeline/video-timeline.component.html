@@ -21,9 +21,11 @@
     <div #waveformContainer class="waveform-container"></div>
     
     <div class="needle start-needle" [style.left.px]="getNeedlePosition('start')" (mousedown)="startDrag('start')">
+        <div class="needle-head"></div>
         <div class="needleInner"></div>
     </div>
     <div class="needle end-needle" [style.left.px]="getNeedlePosition('end')" (mousedown)="startDrag('end')">
+        <div class="needle-head"></div>
         <div class="needleInner"></div>
     </div>
     

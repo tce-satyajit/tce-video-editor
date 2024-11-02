@@ -23,7 +23,7 @@
   
   .frame img {
     width: 100px;
-    border-radius: 5px;
+    
   }
   
   .needle {
@@ -44,6 +44,8 @@
   .end-needle {
     //background-color: rgb(142, 94, 6);
     cursor: pointer;
+
+    left: 250px;
   }
 
   .needleInner{
@@ -68,4 +70,16 @@
     text-align: center;
     background: black;
     color: orange;
+  }
+
+  .needle-head{
+    clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+    background: #dd0101;
+    width: 22px;
+    height: 14px;
+    position: absolute;
+    transform: rotate(-90deg);
+    left: -3px;
+    pointer-events: none;
+    top: 0px;
   }
