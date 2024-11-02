@@ -3,11 +3,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video-output',
-  template: `
-    <div *ngIf="safeVideoUrl" style="text-align: center; background: black;">
-      <video controls [src]="safeVideoUrl" width="50%"></video>
-    </div>
-  `
+  templateUrl: './video-output.component.html',
+  styleUrls: ['./video-output.component.scss']
 })
 export class VideoOutputComponent implements OnChanges {
   @Input() videoUrl: string | undefined;

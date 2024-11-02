@@ -1,1 +1,3 @@
-<p>video-output works!</p>
+<div *ngIf="safeVideoUrl" style="text-align: center; background: black;">
+    <video controls [src]="safeVideoUrl" width="50%"></video>
+  </div>
