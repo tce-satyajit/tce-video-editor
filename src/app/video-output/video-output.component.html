@@ -1,3 +1,6 @@
-<div *ngIf="safeVideoUrl" style="text-align: center; background: black;">
+<div *ngIf="safeVideoUrl" class="videoOutRoot">
+  <div style="text-align: center; background: black; border-radius: 10px;">
     <video controls [src]="safeVideoUrl" width="50%"></video>
+  </div>  
+  
   </div>

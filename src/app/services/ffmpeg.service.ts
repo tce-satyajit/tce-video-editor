@@ -6,6 +6,7 @@ import { createFFmpeg, FFmpeg } from '@ffmpeg/ffmpeg';
 })
 export class FfmpegService {
   private ffmpeg: FFmpeg;
+  public audioBlob: any;
   isReady = false;
 
   constructor() {
@@ -78,12 +79,14 @@ export class FfmpegService {
       '-i', 'input.mp4',
       '-q:a', '0',
       '-map', 'a',
+      '-ar', '16000',
       'audio.mp3'
     );
 
     const audioData = this.ffmpeg.FS('readFile', 'audio.mp3');
     const audioBlob = new Blob([audioData.buffer], { type: 'audio/mp3' });
     const audioUrl = URL.createObjectURL(audioBlob);
+    this.audioBlob = audioBlob;
 
     this.ffmpeg.FS('unlink', 'input.mp4');
     this.ffmpeg.FS('unlink', 'audio.mp3');
@@ -116,4 +119,7 @@ export class FfmpegService {
 
     return waveform.map(value => value * 100); // Scale for rendering
   }
+
+  
+
 }

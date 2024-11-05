@@ -26,9 +26,10 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
   private waveSurfer!: WaveSurfer;
   private waveSurferUpdateInterval: any;
   private isSeeking: boolean = false; // Flag to prevent feedback loop
-
+  private audioURL: any;
   unsafeUrl: any;
   safeVideoUrl: any;
+  sentences: any;
   constructor(
     private ffmpegService: FfmpegService, 
     private sanitizer: DomSanitizer,
@@ -55,6 +56,7 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
 
   private async initializeWaveform() {
     const audioUrl = await this.ffmpegService.extractAudio(this.videoFile);
+    this.audioURL = audioUrl;
     /*
     this.waveSurfer = WaveSurfer.create({
       container: this.waveformContainer.nativeElement,
@@ -107,6 +109,35 @@ export class VideoTimelineComponent implements OnInit, OnDestroy {
       this.updateTimelineScroll(seekTime);
       this.isSeeking = false;
     });
+
+    console.log('audioURL', this.audioURL);
+    this.predictAudio(this.ffmpegService.audioBlob)
+  }
+
+  predictAudio(audioBlob: any) {
+    console.log('Submitting audio for prediction...');
+    let url1 = 'https://172.18.3.205:8080' // ritwik
+    let url2 = 'https://172.16.52.50:8080' // server
+
+
+    fetch(url2+'/check_audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        body: audioBlob,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Predicted Text: ' + data.result);
+      this.getSentences(data.result)
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        console.log('Error in prediction: ' + error);
+    });
+  }
+
+  getSentences(text: any) {
+    this.sentences =  text.split('.').filter((sentence:string) => sentence.trim() !== '');
   }
 
   getNeedlePosition(needleType: 'start' | 'end'): number {

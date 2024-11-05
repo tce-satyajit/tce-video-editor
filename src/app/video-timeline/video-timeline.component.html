@@ -1,3 +1,4 @@
+<div class="videoTimelineRoot">
 <div class="videoPlayer">
     <video #videoPlayer controls [src]="safeVideoUrl" style="width: 40%;"></video>
     <div class="controls">
@@ -11,7 +12,11 @@
   
   <div class="timeline-container">
     
-  
+    <div class="textContainer">
+      <div class="textItem" *ngFor="let item of sentences">
+        {{ item.trim() }}
+      </div>
+    </div>
     <div #framesContainer class="frames-container" (scroll)="onScroll($event)">
       <div *ngFor="let frame of frames" class="frame">
         <img [src]="frame" alt="Frame" />
@@ -19,6 +24,8 @@
     </div>
     
     <div #waveformContainer class="waveform-container"></div>
+
+   
     
     <div class="needle start-needle" [style.left.px]="getNeedlePosition('start')" (mousedown)="startDrag('start')">
         <div class="needle-head"></div>
@@ -32,4 +39,4 @@
   
     
   </div>
-  
+  </div>
